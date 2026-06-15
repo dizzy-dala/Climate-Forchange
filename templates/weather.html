@@ -1,0 +1,38 @@
+﻿{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+<section class="section">
+    <div class="section-heading">
+        <div>
+            <h2>Weather Dashboard</h2>
+            <p class="section-description">Real-time weather conditions from OpenWeatherMap.</p>
+        </div>
+    </div>
+    <div class="card">
+        <form method="get">
+            <label for="city">City</label>
+            <input id="city" name="city" value="{{ city }}" placeholder="Enter city name" />
+            <button class="btn btn-primary" type="submit">Check Weather</button>
+            <button class="btn btn-secondary" type="button" id="use-location-btn">Use my location</button>
+        </form>
+    </div>
+    <div id="weather-output">
+        <div class="alert-card" id="weather-error">{% if weather.error %}{{ weather.error }}{% endif %}</div>
+        {% if not weather.error %}
+            <div class="card" id="weather-card">
+                <h3 id="weather-city"><span class="list-icon">🌡</span>Current weather in {{ weather.city }}</h3>
+                <ul class="card-list">
+                    <li><span class="list-icon">🔥</span><div><strong>Temperature</strong><small id="weather-temperature">{{ weather.temperature }} °C</small></div></li>
+                    <li><span class="list-icon">💧</span><div><strong>Humidity</strong><small id="weather-humidity">{{ weather.humidity }}%</small></div></li>
+                    <li><span class="list-icon">💨</span><div><strong>Wind speed</strong><small id="weather-wind">{{ weather.wind_speed }} m/s</small></div></li>
+                    <li><span class="list-icon">🌧</span><div><strong>Rainfall</strong><small id="weather-rain">{{ weather.rainfall }} mm</small></div></li>
+                    <li><span class="list-icon">☁️</span><div><strong>Conditions</strong><small id="weather-description">{{ weather.description }}</small></div></li>
+                    <li><span class="list-icon">💡</span><div><strong>Advice</strong><small id="weather-advice">{{ weather.advice }}</small></div></li>
+                </ul>
+                <p><a id="weather-forecast-link" class="btn btn-secondary" href="{{ weather.forecast_link }}" target="_blank">View extended forecast</a></p>
+            </div>
+        {% endif %}
+    </div>
+</section>
+<script src="{% static 'js/weather.js' %}"></script>
+{% endblock %}

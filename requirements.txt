@@ -1,0 +1,6 @@
+Django==6.0.6
+gunicorn==21.2.0
+whitenoise==6.4.0
+requests==2.31.0
+
+# Add other dependencies your project requires

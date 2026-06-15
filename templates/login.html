@@ -1,0 +1,15 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+<section class="section">
+    <div class="form-card card">
+        <h2>Sign In</h2>
+        <p>Access your Climate Forchange account to view alerts, resources, and weather updates.</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary" type="submit">Login</button>
+        </form>
+        <p><a href="/password-reset/">Forgot password?</a></p>
+    </div>
+</section>
+{% endblock %}

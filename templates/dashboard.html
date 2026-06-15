@@ -1,0 +1,22 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+<section class="section">
+    <div class="section-heading">
+        <div>
+            <h2>Admin Dashboard</h2>
+            <p class="section-description">Summary of users, published resources, news, and alerts.</p>
+        </div>
+    </div>
+    <div class="grid-3">
+        <div class="card"><h3>👥 Total users</h3><p>{{ counts.users }}</p></div>
+        <div class="card"><h3>📁 PDF resources</h3><p>{{ counts.resources }}</p></div>
+        <div class="card"><h3>📰 News articles</h3><p>{{ counts.news }}</p></div>
+        <div class="card"><h3>🚨 Total alerts</h3><p>{{ counts.alerts }}</p></div>
+        <div class="card"><h3>⚡ Active alerts</h3><p>{{ active_alerts }}</p></div>
+    </div>
+    <div class="card" style="margin-top:1.5rem;">
+        <p>Use the Django admin to upload PDF resources, publish news, and create warning alerts.</p>
+        <p><a class="btn btn-secondary" href="/admin/">Open Admin Panel</a></p>
+    </div>
+</section>
+{% endblock %}

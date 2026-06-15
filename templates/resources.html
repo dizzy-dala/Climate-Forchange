@@ -1,0 +1,33 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+<section class="section">
+    <div class="section-heading">
+        <div>
+            <h2>PDF Resources</h2>
+            <p class="section-description">Search and download guides built for emergency preparedness and climate resilience.</p>
+        </div>
+    </div>
+    <div class="card">
+        <form method="get">
+            <label for="q">Search documents</label>
+            <input id="q" type="search" name="q" placeholder="Enter keywords" value="{{ query }}" />
+            <button class="btn btn-primary" type="submit">Search</button>
+        </form>
+    </div>
+    {% if resources %}
+        <ul class="card-list">
+            {% for resource in resources %}
+                <li>
+                    <span class="list-icon">📄</span>
+                    <div>
+                        <h3><a href="{{ resource.file.url }}" target="_blank">{{ resource.title }}</a></h3>
+                        <p>{{ resource.description|default:'Download this resource for additional climate and safety guidance.' }}</p>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert-card">No matching resources found.</div>
+    {% endif %}
+</section>
+{% endblock %}

@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="section">
+    <div class="section-heading">
+        <div>
+            <h2>Admin Monitor</h2>
+            <p class="section-description">Live activity, recent requests, and audit logs.</p>
+        </div>
+    </div>
+
+    <div class="grid-3">
+        <div class="card"><h3>👥 Users</h3><p>{{ stats.users }}</p></div>
+        <div class="card"><h3>📁 Resources</h3><p>{{ stats.resources }}</p></div>
+        <div class="card"><h3>📰 News</h3><p>{{ stats.news }}</p></div>
+    </div>
+
+    <div style="margin-top:1.25rem;">
+        <div class="card">
+            <h3>Recent Weather Requests</h3>
+            <p>
+                <a class="btn btn-secondary" href="{% url 'export_weather_csv' %}">Export CSV</a>
+            </p>
+            <ul class="card-list">
+                {% for w in weather_logs %}
+                    <li>
+                        <span class="list-icon">🌍</span>
+                        <div>
+                            <strong>{{ w.city|default:'(none)' }}</strong>
+                            <p>{{ w.result_summary }}</p>
+                            <small>{{ w.user }} • {{ w.ip }} • {{ w.created_at|date:'M d, Y H:i' }}</small>
+                        </div>
+                    </li>
+                {% empty %}
+                    <li>No weather requests yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <div class="card" style="margin-top:1rem;">
+            <h3>Recent Audit Logs</h3>
+            <p><a class="btn btn-secondary" href="{% url 'export_audits_csv' %}">Export CSV</a></p>
+            <ul class="card-list">
+                {% for a in audits %}
+                    <li>
+                        <span class="list-icon">📝</span>
+                        <div>
+                            <strong>[{{ a.level|upper }}] {{ a.action }}</strong>
+                            <p>{{ a.details|truncatechars:160 }}</p>
+                            <small>{{ a.user }} • {{ a.created_at|date:'M d, Y H:i' }}</small>
+                        </div>
+                    </li>
+                {% empty %}
+                    <li>No audit logs yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="card" style="margin-top:1.25rem;">
+        <h3>Requests Trend</h3>
+        <canvas id="requestsChart" width="600" height="200"></canvas>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'js/monitor.js' %}"></script>
+    
+</section>
+{% endblock %}

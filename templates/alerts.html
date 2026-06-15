@@ -1,0 +1,29 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+<section class="section">
+    <div class="section-heading">
+        <div>
+            <h2>Early Warning Alerts</h2>
+            <p class="section-description">Current flood, wind, drought, heat wave, and rainfall warnings.</p>
+        </div>
+    </div>
+    {% if alerts %}
+        <ul class="card-list">
+            {% for alert in alerts %}
+                <li class="alert-item">
+                    <h3>
+                        <span class="alert-type-icon">
+                            {% if alert.alert_type == 'flood' %}🌊{% elif alert.alert_type == 'rain' %}☔{% elif alert.alert_type == 'drought' %}🌵{% elif alert.alert_type == 'wind' %}💨{% elif alert.alert_type == 'heat' %}🔥{% else %}⚠️{% endif %}
+                        </span>
+                        {{ alert.title }}
+                    </h3>
+                    <p>{{ alert.message|linebreaksbr }}</p>
+                    <span class="alert-tag">{{ alert.get_alert_type_display }} • {{ alert.severity|title }}{% if alert.expires_at %} • Expires {{ alert.expires_at|date:'M d, Y H:i' }}{% endif %}</span>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert-card">There are currently no active alerts.</div>
+    {% endif %}
+</section>
+{% endblock %}

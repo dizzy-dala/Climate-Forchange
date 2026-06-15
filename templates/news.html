@@ -1,0 +1,27 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+<section class="section">
+    <div class="section-heading">
+        <div>
+            <h2>News & Announcements</h2>
+            <p class="section-description">Official updates from Climate Forchange administrators.</p>
+        </div>
+    </div>
+    {% if articles %}
+        <ul class="card-list">
+            {% for article in articles %}
+                <li>
+                    <span class="list-icon">📰</span>
+                    <div>
+                        <h3>{{ article.title }}</h3>
+                        <p>{{ article.content|linebreaksbr }}</p>
+                        <small>Published {{ article.published_at|date:'M d, Y' }}</small>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert-card">No news items are available right now.</div>
+    {% endif %}
+</section>
+{% endblock %}

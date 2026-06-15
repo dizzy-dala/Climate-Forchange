@@ -1,0 +1,14 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+<section class="section">
+    <div class="form-card card">
+        <h2>Your Profile</h2>
+        <p>Update your contact details and alert preferences for weather warnings.</p>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button class="btn btn-primary" type="submit">Save Profile</button>
+        </form>
+    </div>
+</section>
+{% endblock %}

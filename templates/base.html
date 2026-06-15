@@ -1,0 +1,51 @@
+﻿{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Climate Forchange</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<header class="site-header">
+    <div class="container">
+        <a href="/" class="brand">Climate Forchange</a>
+        <nav class="main-nav">
+            <a href="/weather/"><span class="nav-icon">🌤</span>Weather</a>
+            <a href="/alerts/"><span class="nav-icon">🚨</span>Alerts</a>
+            <a href="/resources/"><span class="nav-icon">📁</span>Resources</a>
+            <a href="/news/"><span class="nav-icon">📰</span>News</a>
+            {% if user.is_authenticated and user.is_staff %}
+                <a href="/dashboard/"><span class="nav-icon">📊</span>Dashboard</a>
+            {% endif %}
+            {% if user.is_authenticated %}
+                <a href="/profile/"><span class="nav-icon">👤</span>Profile</a>
+                <a href="/logout/"><span class="nav-icon">🔒</span>Logout</a>
+            {% else %}
+                <a href="/login/"><span class="nav-icon">🔑</span>Login</a>
+                <a href="/register/"><span class="nav-icon">📝</span>Register</a>
+            {% endif %}
+        </nav>
+    </div>
+</header>
+<main class="page-content container">
+    {% if messages %}
+        <section class="alert-card">
+            {% for message in messages %}
+                <div>{{ message }}</div>
+            {% endfor %}
+        </section>
+    {% endif %}
+    {% block content %}{% endblock %}
+</main>
+<footer>
+    <div class="container">
+        <p>Climate Forchange &mdash; Real-time weather intelligence, safety alerts, and community resources.</p>
+    </div>
+</footer>
+</body>
+</html>

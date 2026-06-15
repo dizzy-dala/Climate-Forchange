@@ -1,0 +1,104 @@
+﻿{% extends 'base.html' %}
+{% block content %}
+<section class="hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Climate Intelligence</span>
+        <h1>Stay safe with live weather updates, emergency alerts, and trusted resources.</h1>
+        <p>Climate Forchange helps communities prepare for floods, droughts, heat waves, and severe storms with modern weather data and educational materials.</p>
+        <div class="hero-actions">
+            <a class="btn btn-primary" href="/weather/">View Weather</a>
+            <a class="btn btn-secondary" href="/alerts/">Check Alerts</a>
+        </div>
+    </div>
+    <div class="hero-visual">
+        <div class="visual-card">
+            <h3 class="eyebrow" style="color:#0f172a;">Connected Alerts</h3>
+            <p>Track weather risks in one place with clearly labeled warnings, action steps, and safety resources.</p>
+            <div class="feature-item">
+                <span class="feature-icon weather">☁️</span>
+                <div>
+                    <strong>Live weather</strong>
+                    <p>Temperature, rainfall, humidity, and wind speed for any city.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon alert">⚠️</span>
+                <div>
+                    <strong>Urgent alerts</strong>
+                    <p>Floods, storms, heat waves, and drought warnings delivered clearly.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon resource">📄</span>
+                <div>
+                    <strong>PDF resources</strong>
+                    <p>Download preparedness guides, first aid manuals, and safety checklists.</p>
+                </div>
+            </div>
+            <div class="feature-item">
+                <span class="feature-icon news">📰</span>
+                <div>
+                    <strong>Announcements</strong>
+                    <p>Stay informed with the latest news and community updates.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="section">
+    <div class="section-heading">
+        <h2>Active Alerts</h2>
+        <p class="section-description">Latest warnings from your community dashboard.</p>
+    </div>
+    {% if alerts %}
+        <ul class="card-list">
+            {% for alert in alerts %}
+                <li>
+                    <h3>{{ alert.title }}</h3>
+                    <p>{{ alert.message|truncatechars:160 }}</p>
+                    <small>{{ alert.get_alert_type_display }} • {{ alert.severity|title }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert-card">No active safety alerts at this time.</div>
+    {% endif %}
+</section>
+<section class="section">
+    <div class="section-heading">
+        <h2>Featured Resources</h2>
+        <p class="section-description">Downloadable COVID-free guides and climate awareness documents.</p>
+    </div>
+    {% if resources %}
+        <ul class="card-list">
+            {% for resource in resources %}
+                <li>
+                    <h3><a href="{{ resource.file.url }}">{{ resource.title }}</a></h3>
+                    <p>{{ resource.description|default:'Helpful PDF resource for resilience and preparedness.' }}</p>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert-card">No resources are published yet.</div>
+    {% endif %}
+</section>
+<section class="section">
+    <div class="section-heading">
+        <h2>News & Updates</h2>
+        <p class="section-description">Important announcements and climate safety articles.</p>
+    </div>
+    {% if news %}
+        <ul class="card-list">
+            {% for article in news %}
+                <li>
+                    <h3>{{ article.title }}</h3>
+                    <p>{{ article.content|truncatechars:160 }}</p>
+                    <small>Published {{ article.published_at|date:'M d, Y' }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <div class="alert-card">No news has been posted yet.</div>
+    {% endif %}
+</section>
+{% endblock %}
