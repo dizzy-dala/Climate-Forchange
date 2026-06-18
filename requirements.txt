@@ -13,3 +13,4 @@ urllib3==2.7.0
 whitenoise==6.4.0
 psycopg2-binary==2.9.6
 dj-database-url==1.0.0
+pillow==12.2.0
