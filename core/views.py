@@ -187,15 +187,27 @@ def alerts_list(request):
 
 @login_required
 def dashboard(request):
-    if not request.user.is_staff:
-        messages.warning(request, 'Administrator access is required to view the dashboard.')
-        return redirect('home')
+    if request.user.is_staff:
+        counts = {
+            'users': User.objects.count(),
+            'resources': PDFResource.objects.count(),
+            'news': NewsArticle.objects.count(),
+            'alerts': WeatherAlert.objects.count(),
+        }
+        active_alerts = WeatherAlert.objects.filter(active=True).count()
+        return render(request, 'dashboard.html', {'counts': counts, 'active_alerts': active_alerts})
 
-    counts = {
-        'users': User.objects.count(),
-        'resources': PDFResource.objects.count(),
-        'news': NewsArticle.objects.count(),
-        'alerts': WeatherAlert.objects.count(),
-    }
-    active_alerts = WeatherAlert.objects.filter(active=True).count()
-    return render(request, 'dashboard.html', {'counts': counts, 'active_alerts': active_alerts})
+    latest_alerts = WeatherAlert.objects.filter(active=True).order_by('-created_at')[:3]
+    latest_news = NewsArticle.objects.filter(active=True).order_by('-published_at')[:3]
+    resources = PDFResource.objects.filter(active=True).order_by('-uploaded_at')[:4]
+    profile, _ = UserProfile.objects.get_or_create(user=request.user)
+    weather_data = get_weather_data(city=profile.city or 'Nairobi')
+
+    return render(request, 'dashboard.html', {
+        'welcome_name': request.user.first_name or request.user.username,
+        'weather_data': weather_data,
+        'latest_alerts': latest_alerts,
+        'latest_news': latest_news,
+        'resources': resources,
+        'profile': profile,
+    })

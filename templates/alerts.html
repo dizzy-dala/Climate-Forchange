@@ -10,7 +10,13 @@
     {% if alerts %}
         <ul class="card-list">
             {% for alert in alerts %}
-                <li class="alert-item">
+                <li class="alert-item alert-item-severity-{{ alert.severity }}">
+                    <div class="alert-card-header">
+                        <span class="alert-severity-pill alert-severity-{{ alert.severity }}">
+                            {% if alert.severity == 'low' %}🟢 Low risk{% elif alert.severity == 'medium' %}🟡 Moderate{% elif alert.severity == 'high' %}🔴 Severe{% else %}⚠️ {{ alert.severity|title }}{% endif %}
+                        </span>
+                        <span class="alert-date">Issued {{ alert.created_at|date:'M d, Y' }}</span>
+                    </div>
                     <h3>
                         <span class="alert-type-icon">
                             {% if alert.alert_type == 'flood' %}🌊{% elif alert.alert_type == 'rain' %}☔{% elif alert.alert_type == 'drought' %}🌵{% elif alert.alert_type == 'wind' %}💨{% elif alert.alert_type == 'heat' %}🔥{% else %}⚠️{% endif %}
@@ -18,7 +24,7 @@
                         {{ alert.title }}
                     </h3>
                     <p>{{ alert.message|linebreaksbr }}</p>
-                    <span class="alert-tag">{{ alert.get_alert_type_display }} • {{ alert.severity|title }}{% if alert.expires_at %} • Expires {{ alert.expires_at|date:'M d, Y H:i' }}{% endif %}</span>
+                    <span class="alert-tag">{{ alert.get_alert_type_display }}{% if alert.expires_at %} • Expires {{ alert.expires_at|date:'M d, Y H:i' }}{% endif %}</span>
                 </li>
             {% endfor %}
         </ul>

@@ -26,7 +26,9 @@ class PDFResource(models.Model):
 
 class NewsArticle(models.Model):
     title = models.CharField(max_length=255)
+    summary = models.TextField(blank=True)
     content = models.TextField()
+    image = models.ImageField(upload_to='news_images/', blank=True, null=True)
     published_at = models.DateTimeField(auto_now_add=True)
     active = models.BooleanField(default=True)
 

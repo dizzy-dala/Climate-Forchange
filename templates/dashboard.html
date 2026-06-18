@@ -1,22 +1,87 @@
 ﻿{% extends 'base.html' %}
 {% block content %}
-<section class="section">
+<section class="section dashboard-section">
     <div class="section-heading">
         <div>
-            <h2>Admin Dashboard</h2>
-            <p class="section-description">Summary of users, published resources, news, and alerts.</p>
+            <h2>Welcome back, {{ welcome_name }}.</h2>
+            <p class="section-description">Your personalized overview with weather, alerts, news, resources, and profile details.</p>
         </div>
     </div>
-    <div class="grid-3">
-        <div class="card"><h3>👥 Total users</h3><p>{{ counts.users }}</p></div>
-        <div class="card"><h3>📁 PDF resources</h3><p>{{ counts.resources }}</p></div>
-        <div class="card"><h3>📰 News articles</h3><p>{{ counts.news }}</p></div>
-        <div class="card"><h3>🚨 Total alerts</h3><p>{{ counts.alerts }}</p></div>
-        <div class="card"><h3>⚡ Active alerts</h3><p>{{ active_alerts }}</p></div>
+
+    <div class="dashboard-grid">
+        <article class="card dashboard-panel weather-panel">
+            <h3>Current Weather</h3>
+            {% if weather_data.error %}
+                <p class="text-muted">Unable to load weather data.</p>
+            {% else %}
+                <div class="weather-summary">
+                    <div>
+                        <span class="weather-temp">{{ weather_data.temperature }}°C</span>
+                        <p>{{ weather_data.description }}</p>
+                        <p class="text-muted">{{ weather_data.city }}</p>
+                    </div>
+                    <div class="weather-details">
+                        <span>Humidity: {{ weather_data.humidity }}%</span>
+                        <span>Wind: {{ weather_data.wind_speed }} m/s</span>
+                    </div>
+                </div>
+            {% endif %}
+        </article>
+
+        <article class="card dashboard-panel alerts-panel">
+            <h3>Latest Alerts</h3>
+            {% if latest_alerts %}
+                <ul class="mini-list">
+                    {% for alert in latest_alerts %}
+                        <li class="alert-pill alert-pill-{{ alert.severity }}">
+                            <strong>{{ alert.title }}</strong>
+                            <span>{{ alert.created_at|date:'M d' }}</span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p class="text-muted">No active alerts at the moment.</p>
+            {% endif %}
+        </article>
+
+        <article class="card dashboard-panel profile-panel">
+            <h3>Your Profile</h3>
+            <p><strong>Username:</strong> {{ request.user.username }}</p>
+            <p><strong>Email:</strong> {{ request.user.email|default:'Not provided' }}</p>
+            <p><strong>City:</strong> {{ profile.city|default:'Not set' }}</p>
+            <p><strong>Receive alerts:</strong> {{ profile.receive_alerts|yesno:'Yes,No' }}</p>
+            <p class="text-muted">Member since {{ request.user.date_joined|date:'M d, Y' }}</p>
+        </article>
     </div>
-    <div class="card" style="margin-top:1.5rem;">
-        <p>Use the Django admin to upload PDF resources, publish news, and create warning alerts.</p>
-        <p><a class="btn btn-secondary" href="/admin/">Open Admin Panel</a></p>
-    </div>
+
+    <section class="section dashboard-section">
+        <div class="section-heading">
+            <h3>Latest News</h3>
+        </div>
+        <ul class="card-list dashboard-card-list">
+            {% for article in latest_news %}
+                <li>
+                    <h4>{{ article.title }}</h4>
+                    <p>{{ article.summary|default:article.content|truncatechars:120 }}</p>
+                    <small class="text-muted">Published {{ article.published_at|date:'M d, Y' }}</small>
+                </li>
+            {% endfor %}
+        </ul>
+    </section>
+
+    <section class="section dashboard-section">
+        <div class="section-heading">
+            <h3>Available Resources</h3>
+        </div>
+        <div class="resource-grid">
+            {% for resource in resources %}
+                <article class="card resource-card">
+                    <h4>{{ resource.title }}</h4>
+                    <p>{{ resource.description|truncatechars:140 }}</p>
+                    <a class="btn btn-secondary" href="{{ resource.file.url }}" target="_blank">Download PDF</a>
+                </article>
+            {% endfor %}
+        </div>
+    </section>
 </section>
 {% endblock %}
