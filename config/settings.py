@@ -92,13 +92,11 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # Uses DATABASE_URL environment variable when available (Render provides this).
 # Falls back to a local SQLite file for development.
-default_sqlite = f"sqlite:///{str(BASE_DIR / 'db.sqlite3').replace('\\\\','/')}"
 
 DATABASES = {
-    'default': dj_database_url.parse(
-        os.environ.get('DATABASE_URL', default_sqlite),
-        conn_max_age=600,
-        ssl_require=not DEBUG,
+    'default': dj_database_url.config(
+        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        conn_max_age=600
     )
 }
 
