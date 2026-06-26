@@ -92,6 +92,7 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database
 # Uses DATABASE_URL environment variable when available (Render provides this).
 # Falls back to a local SQLite file for development.
+import dj_database_url
 
 DATABASES = {
     'default': dj_database_url.config(
