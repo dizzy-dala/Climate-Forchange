@@ -1,6 +1,4 @@
-﻿import os
-
-from django.contrib import messages
+﻿from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -15,27 +13,6 @@ from django.http import HttpResponse, JsonResponse
 import csv
 import io
 from django.views.decorators.http import require_GET
-
-
-def setup_admin(request):
-    token = request.GET.get('token', '')
-    expected_token = os.environ.get('ADMIN_SETUP_TOKEN', '')
-
-    if not token or token != expected_token:
-        return JsonResponse({'error': 'invalid token'}, status=403)
-
-    username = os.environ.get('DJANGO_SUPERUSER_USERNAME')
-    email = os.environ.get('DJANGO_SUPERUSER_EMAIL')
-    password = os.environ.get('DJANGO_SUPERUSER_PASSWORD')
-
-    if not username or not email or not password:
-        return JsonResponse({'error': 'superuser credentials not configured'}, status=400)
-
-    if User.objects.filter(username=username).exists():
-        return JsonResponse({'message': 'superuser already exists'})
-
-    User.objects.create_superuser(username=username, email=email, password=password)
-    return JsonResponse({'message': 'superuser created'})
 
 
 def home(request):
