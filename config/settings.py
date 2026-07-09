@@ -14,9 +14,11 @@ import os
 from pathlib import Path
 import dj_database_url
 import cloudinary
+from dotenv import load_dotenv
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / ".env")
 
 OPENWEATHER_API_KEY = os.environ.get('OPENWEATHER_API_KEY', '')
 LOGIN_URL = 'login'
@@ -146,7 +148,7 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 # Django 6 STORAGES
 STORAGES = {
     "default": {
-        "BACKEND": "cloudinary_storage.backends.MediaCloudinaryStorage",
+        "BACKEND": "cloudinary_storage.storage.MediaCloudinaryStorage",
     },
     "staticfiles": {
         "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
@@ -159,6 +161,11 @@ cloudinary.config(
     api_key=os.environ.get('CLOUDINARY_API_KEY', ''),
     api_secret=os.environ.get('CLOUDINARY_API_SECRET', ''),
 )
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": os.environ.get("CLOUDINARY_CLOUD_NAME"),
+    "API_KEY": os.environ.get("CLOUDINARY_API_KEY"),
+    "API_SECRET": os.environ.get("CLOUDINARY_API_SECRET"),
+}
 
 MEDIA_URL = '/media/'
 # MEDIA_ROOT is not used when using Cloudinary storage
