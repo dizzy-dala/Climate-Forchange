@@ -46,7 +46,6 @@ else:
 # Application definition
 
 INSTALLED_APPS = [
-    'cloudinary_storage',
     'cloudinary',
     'core',
     'django.contrib.admin',
@@ -139,10 +138,20 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+STATIC_URL = "/static/"
+STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
+
+
+# Django 6 STORAGES
+STORAGES = {
+    "default": {
+        "BACKEND": "cloudinary_storage.backends.MediaCloudinaryStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedManifestStaticFilesStorage",
+    },
+}
 
 # Cloudinary Configuration for Media Files
 cloudinary.config(
@@ -151,7 +160,6 @@ cloudinary.config(
     api_secret=os.environ.get('CLOUDINARY_API_SECRET', ''),
 )
 
-DEFAULT_FILE_STORAGE = 'cloudinary_storage.backends.MediaCloudinaryStorage'
 MEDIA_URL = '/media/'
 # MEDIA_ROOT is not used when using Cloudinary storage
 
